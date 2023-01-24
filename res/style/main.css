@@ -1,8 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 :root {
-    --mainColor: #a6c36f;
+    --mainColor: #c138d0;
     --taskbarIconSize: 22px;
+    --windowToolbarRed: #ef476f;
+    --windowToolbarYellow: #ffd166;
+    --windowToolbarGreen: #06d6a0;
 }
 
 * {
@@ -16,16 +19,94 @@ body, html {
     height: 100%;
     padding: 0;
     margin: 0;
-    background: #0b090a;
+    overflow: hidden;
 }
 
-#mainScreen {
+.noselect, .desktop-window-header, button, svg, input, .widgets {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#mainScreen, #loadingScreen, #lockScreen {
+    position: absolute;
     width: 100%;
     height: 100%;
+    overflow: hidden;
 }
 
-#taskbarStart {
-    cursor: pointer;
+#loadingScreen {
+    z-index: 999;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: .2s;
+}
+
+#lockScreen {
+    top: 0;
+    transition: .4s ease;
+    box-shadow: 0 0 500px rgba(0,0,0,1);
+}
+
+#lockScreenInput {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    cursor: default;
+    padding: 8px 12px;
+    font-size: 16px;
+    border: 1px solid rgba(255, 255, 255, .3);
+    border-radius: 5px;
+    background: rgba(0, 0, 0, .2);
+    letter-spacing: 5px;
+    font-family: monospace;
+    color: rgba(255, 255, 255, .7);
+    transition: .2s;
+}
+
+#lockScreenInput:focus {
+    border: 1px solid rgba(255, 255, 255, .7);
+}
+
+.widgets-lockScreen {
+    transition: .2s;
+}
+
+.loader {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border-top: 0;
+    border-left: 0;
+    border-bottom: 3px solid transparent;
+    border-right: 3px solid white;
+    animation: infinite rotate 1s linear;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+#lockScreen {
+    z-index: 90;
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,.6)), url("../assets/lockscreen.jpg");
+    background-size: cover;
+    backdrop-filter: brightness(.5);
+}
+
+.lockBlackOut {
+    background: linear-gradient(rgba(0,0,0,1), rgba(0,0,0,1)), url("../assets/lockscreen.jpg") !important;
 }
 
 #taskbarStart > svg {
@@ -34,6 +115,145 @@ body, html {
 
 #taskbarStart:hover > svg {
     fill: var(--mainColor);
+}
+
+.wallpaper {
+    position: absolute;
+    top: -5%;
+    left: -5%;
+    width: 110%;
+    height: 110%;
+    padding: 0;
+    margin: 0;
+    background: url("../assets/lockscreen.jpg") center center;
+    background-size: cover;
+    overflow: hidden;
+}
+
+.desktop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 46;
+    width: 100%;
+    height: calc(100% - 48px);
+}
+
+.desktop-window {
+    position: absolute;
+    top: 200px;
+    left: 300px;
+    backdrop-filter: blur(5px);
+    background: rgba(0, 0, 0, .75);
+    color: white;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.desktop-window-header {
+    font-size: 16px;
+    padding: 6px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.desktop-window-header:after {
+    position: absolute;
+    content: '';
+    height: 1px;
+    top: 36px;
+    background: rgba(255, 255, 255, .1);
+    width: calc(100% - 24px);
+}
+
+.desktop-window-header-title {
+    width: 100%;
+    color: rgba(255, 255, 255, .5);
+    font-weight: bold;
+    text-overflow: ellipsis;
+    cursor: move;
+}
+
+.desktop-window-header-title > svg {
+    fill: rgba(255, 255, 255, .5);
+    height: 14px;
+    position: relative;
+    top: 1px;
+    margin-right: 5px;
+}
+
+.desktop-window-header-tools {
+    gap: 8px;
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+.desktop-window-header-tools > * {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.desktop-window-header-tools > *:hover {
+    opacity: .8;
+}
+
+.desktop-window-header-tools-min {background: var(--windowToolbarGreen);}
+.desktop-window-header-tools-max {background: var(--windowToolbarYellow);}
+.desktop-window-header-tools-off {background: var(--windowToolbarRed);}
+
+.desktop-window-content {
+    min-width: 320px;
+    min-height: 140px;
+    padding: 20px;
+    overflow: auto;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.resizable {
+    resize: both;
+}
+
+.desktop-window-content > p {
+    margin: 0;
+    margin-bottom: 20px;
+}
+
+.desktop-window-content > div {
+    display: flex;
+    width: 100%;
+    gap: 5px;
+    flex-direction: row-reverse;
+}
+
+button {
+    background: rgba(255, 255, 255, .3);
+    border: 1px solid rgba(0, 0, 0, 0);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    color: rgba(0, 0, 0, .75);
+    cursor: pointer;
+    transition: .2s;
+}
+
+button:hover {
+    background: transparent;
+    color: rgba(255, 255, 255, .3);
+    border: 1px solid rgba(255, 255, 255, .3);
+}
+
+button:active {
+    filter: blur(1px);
 }
 
 .taskbar {
@@ -66,6 +286,7 @@ body, html {
 
 .taskbar-widget {
     height: 46px;
+    width: 64px;
     display: flex;
     font-size: 12px;
     padding: 0 14px;
@@ -79,6 +300,7 @@ body, html {
 
 .taskbar-icon:hover, .taskbar-widget:hover {
     background: rgba(255, 255, 255, .1);
+    width: calc(var(--taskbarIconSize) + 60px);
 }
 
 .taskbar-icon > *, .taskbar-icon-init {
@@ -98,7 +320,7 @@ body, html {
 }
 
 .taskbar-search:focus-within {
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .2);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .3);
     width: 300px;
 }
 
@@ -122,7 +344,7 @@ body, html {
 }
 
 .taskbar-icon-focus {
-    background: rgba(255, 255, 255, .08);
+    background: rgba(255, 255, 255, .2);
 }
 
 .taskbar-center {
@@ -133,7 +355,7 @@ body, html {
     top: 0;
     left: 0;
     position: absolute;
-    z-index: 49;
+    z-index: 40;
     width: 100%;
     height: 100%;
 }
@@ -146,7 +368,7 @@ body, html {
     color: white;
     font-weight: 600;
     font-size: 128px;
-    text-shadow: 0 0 30px rgba(0, 0, 0, 1), 0 0 60px rgba(0, 0, 0, 1), 0 0 90px rgba(0, 0, 0, 1);
+    text-shadow: 0 0 90px rgba(0, 0, 0, .4);
 }
 
 .widgets-background {
@@ -164,4 +386,25 @@ body, html {
 
 .widgets-background > svg {
     width: 40%;
+}
+
+.widgets-lockScreen-text {
+    position: absolute;
+    top: 260px;
+    left: 50%;
+    opacity: .3;
+    transform: translateX(-50%);
+    color: white;
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.widgets-lock {
+    position: absolute;
+    bottom: 180px;
+    height: 24px;
+    left: 50%;
+    opacity: .3;
+    transform: translateX(-50%);
+    fill: white;
 }
