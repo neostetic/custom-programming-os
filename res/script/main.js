@@ -1,6 +1,6 @@
 window.addEventListener("load", async () => {
     document.getElementById("loadingScreen").style.opacity = '0';
-    await sleep(1000)
+    await sleep(500)
     document.getElementById("loadingScreen").style.display = "none";
 })
 
@@ -20,9 +20,10 @@ let lockScreenBlackoutTime = 120000
 const lockdown = async () => {
     isLocked = true
     lockScreen.style.top = '0'
+    lockScreen.style.transform = "scale(1)"
 }
 
-const password = "password"
+const password = ""
 let lockScreen = document.getElementById("lockScreen");
 let lockScreenInput = document.getElementById("lockScreenInput");
 
@@ -35,29 +36,28 @@ const counterEvents = async () => {
 
 const counterEventsLock = async () => {
     if (isLocked) {
-        if (!password) {
-            await sleep(120)
-            lockScreen.style.top = "-300%"
-            isLocked = false
-            lockScreenInput.value = ""
-        }
+        if (!password)
+            await lockScreenUp()
     }
     await counterEvents
 }
 
-document.onmousemove = counterEvents
+document.getElementById("mainScreen").onmousemove = counterEvents
 document.onkeypress = counterEventsLock
-
 
 lockScreenInput.oninput = async () => {
     if (isLocked) {
-        if (lockScreenInput.value === password) {
-            await sleep(120)
-            lockScreen.style.top = "-300%"
-            isLocked = false;
-            lockScreenInput.value = ""
-        }
+        if (lockScreenInput.value === password)
+            await lockScreenUp()
     }
+}
+
+const lockScreenUp = async () => {
+    await sleep(120)
+    lockScreen.style.top = "-300%"
+    lockScreen.style.transform = "scale(.5)"
+    isLocked = false;
+    lockScreenInput.value = ""
 }
 
 const startTime = async (element) => {
@@ -84,4 +84,23 @@ function parallax(event) {
 
         shift.style.transform = `translateX(${x}px) translateY(${y}px)`;
     });
+}
+
+const randomString = (length) => {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < length) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        counter += 1;
+    }
+    return result;
+}
+
+const deleteValueFromArray = (item, array) => {
+    let index = array.indexOf(item);
+    if (index !== -1) {
+        array.splice(index, 1);
+    }
 }
