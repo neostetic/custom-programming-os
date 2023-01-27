@@ -23,6 +23,10 @@ const lockdown = async () => {
     lockScreen.style.transform = "scale(1)"
 }
 
+const changeHue = (hue) => {
+    document.documentElement.style.setProperty('--colorHue', hue + "deg");
+}
+
 const password = ""
 let lockScreen = document.getElementById("lockScreen");
 let lockScreenInput = document.getElementById("lockScreenInput");
@@ -44,6 +48,14 @@ const counterEventsLock = async () => {
 
 document.getElementById("mainScreen").onmousemove = counterEvents
 document.onkeypress = counterEventsLock
+
+document.addEventListener("keyup", (event) => {
+    if (event.getModifierState("CapsLock")) {
+        document.getElementById("lockScreenInputInfo").style.opacity = "1";
+    } else {
+        document.getElementById("lockScreenInputInfo").style.opacity = "0"
+    }
+})
 
 lockScreenInput.oninput = async () => {
     if (isLocked) {

@@ -75,6 +75,7 @@ async function createWindow(innerHTML, title, icon, resizable, center) {
     })
     windows.push(id)
     createIcon(id)
+    setOnTop(document.getElementById(id))
 }
 
 function createIcon(windowId) {
