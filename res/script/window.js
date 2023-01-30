@@ -22,16 +22,21 @@ document.addEventListener("click", async (e) => {
 
 function minimazeElement(elmnt) {console.log("min")}
 function maximazeElement(elmnt) {console.log("max")}
+
 async function deleteElement(elmnt) {
     let element = document.getElementById(elmnt.id)
     let elementIcon = document.getElementById(element.id + "-icon")
-    for (let i = 0; i < windows.length; i++) if (!document.getElementById(windows[i])) windows.splice(i)
-    for (let i = 0; i < icons.length; i++) if (!document.getElementById(icons[i])) icons.splice(i)
+    // for (let i = 0; i < windows.length; i++) if (!document.getElementById(windows[i].id)) delete windows[i]
+    // for (let i = 0; i < icons.length; i++) if (!document.getElementById(icons[i].id)) delete icons[i]
+    // windows.sort()
+    // windows.length = windows.length - 1
+    // icons.sort()
+    // icons.length = icons.length - 1
     element.style.transform = "scale(0)"
     elementIcon.style.width = '0'
     await sleep(200)
-    element.remove()
-    elementIcon.remove()
+    // element.remove()
+    // elementIcon.remove()
 }
 
 async function createWindow(innerHTML, title, icon, resizable, center) {
@@ -73,7 +78,7 @@ async function createWindow(innerHTML, title, icon, resizable, center) {
     requestAnimationFrame(() => {
         window.classList.remove("scaleIn")
     })
-    windows.push(id)
+    windows.push(window)
     createIcon(id)
     setOnTop(document.getElementById(id))
 }
@@ -89,18 +94,19 @@ function createIcon(windowId) {
     requestAnimationFrame(() => {
         icon.classList.remove("widthIn")
     })
-    icons.push(icon.id)
+    icons.push(icon)
 }
 
 function iconsFocus(windowId) {
     for (let i = 0; i < icons.length; i++) {
-        if (icons[i].includes(windowId)) {
-            document.getElementById(icons[i]).classList.add("taskbar-icon-focus")
+        if (icons[i].id.includes(windowId)) {
+            document.getElementById(icons[i].id).classList.add("taskbar-icon-focus")
         } else {
-            if (document.getElementById(icons[i]).classList.contains("taskbar-icon-focus")) {
-                document.getElementById(icons[i]).classList.remove("taskbar-icon-focus")
+            if (document.getElementById(icons[i].id).classList.contains("taskbar-icon-focus")) {
+                document.getElementById(icons[i].id).classList.remove("taskbar-icon-focus")
             }
         }
+        icons[i] = document.getElementById(icons[i].id)
     }
 }
 

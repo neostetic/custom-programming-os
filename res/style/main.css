@@ -76,6 +76,7 @@ body, html {
 }
 
 #lockScreenInputInfo {
+    opacity: 0;
     position: absolute;
     top: calc(50% + 48px);
     color: rgba(255, 255, 255, .5);
@@ -170,10 +171,12 @@ body, html {
     left: 0;
     z-index: 46;
     width: 100%;
-    height: calc(100% - 48px);
+    height: calc(100% - 46px);
 }
 
 .desktop-window {
+    max-width: 100%;
+    max-height: 100%;
     position: absolute;
     top: 0;
     left: 0;
@@ -257,6 +260,8 @@ body, html {
 .desktop-window-content {
     min-width: 320px;
     min-height: 140px;
+    max-width: 100%;
+    max-height: 100%;
     padding: 20px;
     overflow: auto;
     display: flex;
@@ -270,7 +275,6 @@ body, html {
 
 .desktop-window-content > p {
     margin: 0;
-    margin-right: 20px;
     margin-bottom: 20px;
 }
 
